@@ -1,0 +1,55 @@
+<!-- Toggle Button -->
+<button
+  (click)="toggleSidebar()"
+  class="md:hidden p-2 text-white bg-gray-700 rounded mb-2"
+>
+  <span *ngIf="!isOpen">☰ Open Menu</span>
+  <span *ngIf="isOpen">✖ Close Menu</span>
+</button>
+
+<!-- Sidebar -->
+<div
+  [class.hidden]="!isOpen"
+  class="h-screen flex flex-col bg-gray-800 text-white w-64 md:block"
+>
+  <!-- Logo -->
+  <div class="p-4 text-center text-2xl font-bold border-b border-gray-700">
+    MyApp
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="flex-1 p-4 space-y-4">
+    <ng-container *ngFor="let item of menuItems">
+      <!-- Parent Menu Item -->
+      <div>
+        <a
+          class="block py-2 px-4 rounded hover:bg-gray-700 flex justify-between items-center"
+          [routerLink]="item.route"
+          (click)="item.children?.length ? toggleSubmenu(item) : null"
+          (click)="setActiveMenu(item)"
+          [ngClass]="{ 'bg-gray-700': item.isActive, 'text-gray-300': !item.isActive }"
+        >
+          {{ item.label }}
+          <span *ngIf="item.children?.length" class="ml-2">
+            {{ item.isExpanded ? '▲' : '▼' }}
+          </span>
+        </a>
+      
+        <div *ngIf="item.isExpanded" class="pl-6 space-y-2">
+          <a
+            *ngFor="let child of item.children"
+            [routerLink]="child.route"
+            class="block py-2 px-4 rounded hover:bg-gray-600"
+          >
+            {{ child.label }}
+          </a>
+        </div>
+      </div>      
+    </ng-container>
+  </nav>
+
+  <!-- Footer -->
+  <div class="p-4 border-t border-gray-700 text-sm">
+    © 2024 MyApp
+  </div>
+</div>
